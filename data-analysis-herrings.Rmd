@@ -10,3 +10,15 @@ output:
     theme: united
 ---
 
+## Wykorzystane biblioteki
+```{r wczytywanieBibliotek, results='hide', message=FALSE}
+library(knitr)
+library(dplyr)
+```
+
+
+## Wczytywanie danych
+```{r wczytywanieDanych, cache=TRUE}
+df <- read.csv('data/sledzie.csv')
+```
+
