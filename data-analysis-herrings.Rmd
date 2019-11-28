@@ -16,9 +16,57 @@ library(knitr)
 library(dplyr)
 ```
 
-
 ## Wczytywanie danych
 ```{r wczytywanieDanych, cache=TRUE}
 df <- read.csv('data/sledzie.csv')
 ```
 
+## Exploratory data analysis
+### Struktura danych i podstawowe statystyki
+Zbiór danych śledzie zawiera 52582 wierszy i 16 kolumn
+```{r}
+dim(df)
+```
+
+<p>Kolejne kolumny w zbiorze danych to:</p>
+<ul>
+<li><strong>X</strong>: numer porządkowy</li>
+<li><strong><span style="color:#ce4844">length</span></strong>: długość złowionego śledzia [cm];</li>
+<li><strong>cfin1</strong>: dostępność planktonu [zagęszczenie <em>Calanus finmarchicus</em> gat. 1];</li>
+<li><strong>cfin2</strong>: dostępność planktonu [zagęszczenie <em>Calanus finmarchicus</em> gat. 2];</li>
+<li><strong>chel1</strong>: dostępność planktonu [zagęszczenie <em>Calanus helgolandicus</em> gat. 1];</li>
+<li><strong>chel2</strong>: dostępność planktonu [zagęszczenie <em>Calanus helgolandicus</em> gat. 2];</li>
+<li><strong>lcop1</strong>: dostępność planktonu [zagęszczenie widłonogów gat. 1];</li>
+<li><strong>lcop2</strong>: dostępność planktonu [zagęszczenie widłonogów gat. 2];</li>
+<li><strong>fbar</strong>: natężenie połowów w regionie [ułamek pozostawionego narybku];</li>
+<li><strong>recr</strong>: roczny narybek [liczba śledzi];</li>
+<li><strong>cumf</strong>: łączne roczne natężenie połowów w regionie [ułamek pozostawionego narybku];</li>
+<li><strong>totaln</strong>: łączna liczba ryb złowionych w ramach połowu [liczba śledzi];</li>
+<li><strong>sst</strong>: temperatura przy powierzchni wody [°C];<br />
+</li>
+<li><strong>sal</strong>: poziom zasolenia wody [Knudsen ppt];</li>
+<li><strong>xmonth</strong>: miesiąc połowu [numer miesiąca];</li>
+<li><strong>nao</strong>: oscylacja północnoatlantycka [mb].</li>
+</ul>
+
+Wyświetlmy kilka pierwszych wierszy ze zbioru:
+```{r}
+head(df)
+```
+
+Już w pierwszej obserwacji możemy znaleźć zastanawiającą wartość w kolumnie chel2 - znak zapytania. Najprawdopodobniej tak musiała być oznaczana wartość brakująca (??)
+
+W zbiorze danych możemy zauważyć kilka kolumn oznaczonych jako dane kategoryczne (typ danych Factor). Co ciekawe kolummny te dotyczą dostępności planktonu oraz temperatury wody przy powierzchni, które wydawać by się mogło powinny być wyrażone poprzez liczby, jako dane ilościowe.
+
+```{r}
+str(df)
+```
+
+ToDo: zamienić dane kategoryczne na ilościowe (?)
+
+Obserowane długości śledzi są pomiędzy 19cm a 32.5cm. -> Szczegółowa analiza wartości atrybutów?
+```{r}
+summary(df)
+```
+### Brakujące wartości
+### Szczegółowa analiza wartości atrybutów
