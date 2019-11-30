@@ -1,7 +1,7 @@
 ---
 title: "Analiza danych: śledzie"
 author: "Michał Kałczyński i Patryk Szczuczko"
-date: "28 listopad, 2019"
+date: "30 listopad, 2019"
 output: 
  html_document:
     keep_md: true
@@ -15,6 +15,7 @@ output:
 ```r
 library(knitr)
 library(dplyr)
+library(corrplot)
 ```
 
 ## Wczytywanie danych
@@ -151,4 +152,60 @@ summary(df)
 ##  (Other)      :36810
 ```
 ### Brakujące wartości
+
+```r
+change_na_to_mean <- function(column) {
+  column <- as.numeric(as.character(column))
+  column[is.na(column)] <- mean(column[!is.na(column)])
+  column
+}
+
+data <- tbl_df(df)
+data <- mutate_if(data, is.factor, change_na_to_mean)
+```
+
+```
+## Warning in (function (column) : pojawiły się wartości NA na skutek
+## przekształcenia
+```
+
+```
+## Warning in (function (column) : pojawiły się wartości NA na skutek
+## przekształcenia
+```
+
+```
+## Warning in (function (column) : pojawiły się wartości NA na skutek
+## przekształcenia
+```
+
+```
+## Warning in (function (column) : pojawiły się wartości NA na skutek
+## przekształcenia
+```
+
+```
+## Warning in (function (column) : pojawiły się wartości NA na skutek
+## przekształcenia
+```
+
+```
+## Warning in (function (column) : pojawiły się wartości NA na skutek
+## przekształcenia
+```
+
+```
+## Warning in (function (column) : pojawiły się wartości NA na skutek
+## przekształcenia
+```
+
 ### Szczegółowa analiza wartości atrybutów
+
+### Korelacja
+
+```r
+data %>% select(-X) %>% as.matrix() %>% cor() %>% corrplot(method = "circle")
+```
+
+![](data-analysis-herrings_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+

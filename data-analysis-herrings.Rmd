@@ -14,6 +14,7 @@ output:
 ```{r wczytywanieBibliotek, results='hide', message=FALSE}
 library(knitr)
 library(dplyr)
+library(corrplot)
 ```
 
 ## Wczytywanie danych
@@ -69,4 +70,22 @@ Obserowane długości śledzi są pomiędzy 19cm a 32.5cm. -> Szczegółowa anal
 summary(df)
 ```
 ### Brakujące wartości
+```{r}
+change_na_to_mean <- function(column) {
+  column <- as.numeric(as.character(column))
+  column[is.na(column)] <- mean(column[!is.na(column)])
+  column
+}
+
+data <- tbl_df(df)
+data <- mutate_if(data, is.factor, change_na_to_mean)
+
+```
+
 ### Szczegółowa analiza wartości atrybutów
+
+### Korelacja
+```{r}
+data %>% select(-X) %>% as.matrix() %>% cor() %>% corrplot(method = "circle")
+```
+
