@@ -1,7 +1,7 @@
 ---
 title: "Analiza danych: śledzie"
 author: "Michał Kałczyński i Patryk Szczuczko"
-date: "30 listopad, 2019"
+date: "01 grudzień, 2019"
 output: 
  html_document:
     keep_md: true
@@ -201,11 +201,47 @@ data <- mutate_if(data, is.factor, change_na_to_mean)
 
 ### Szczegółowa analiza wartości atrybutów
 
+```r
+summary(data)
+```
+
+```
+##        X             length         cfin1             cfin2        
+##  Min.   :    0   Min.   :19.0   Min.   : 0.0000   Min.   : 0.0000  
+##  1st Qu.:13145   1st Qu.:24.0   1st Qu.: 0.0000   1st Qu.: 0.2778  
+##  Median :26291   Median :25.5   Median : 0.1333   Median : 0.7012  
+##  Mean   :26291   Mean   :25.3   Mean   : 0.4458   Mean   : 2.0248  
+##  3rd Qu.:39436   3rd Qu.:26.5   3rd Qu.: 0.3603   3rd Qu.: 1.9973  
+##  Max.   :52581   Max.   :32.5   Max.   :37.6667   Max.   :19.3958  
+##      chel1            chel2            lcop1              lcop2       
+##  Min.   : 0.000   Min.   : 5.238   Min.   :  0.3074   Min.   : 7.849  
+##  1st Qu.: 2.469   1st Qu.:13.589   1st Qu.:  2.5479   1st Qu.:17.808  
+##  Median : 6.083   Median :21.435   Median :  7.1229   Median :25.338  
+##  Mean   :10.006   Mean   :21.221   Mean   : 12.8108   Mean   :28.419  
+##  3rd Qu.:11.500   3rd Qu.:27.193   3rd Qu.: 21.2315   3rd Qu.:37.232  
+##  Max.   :75.000   Max.   :57.706   Max.   :115.5833   Max.   :68.736  
+##       fbar             recr              cumf             totaln       
+##  Min.   :0.0680   Min.   : 140515   Min.   :0.06833   Min.   : 144137  
+##  1st Qu.:0.2270   1st Qu.: 360061   1st Qu.:0.14809   1st Qu.: 306068  
+##  Median :0.3320   Median : 421391   Median :0.23191   Median : 539558  
+##  Mean   :0.3304   Mean   : 520367   Mean   :0.22981   Mean   : 514973  
+##  3rd Qu.:0.4560   3rd Qu.: 724151   3rd Qu.:0.29803   3rd Qu.: 730351  
+##  Max.   :0.8490   Max.   :1565890   Max.   :0.39801   Max.   :1015595  
+##       sst             sal            xmonth            nao          
+##  Min.   :12.77   Min.   :35.40   Min.   : 1.000   Min.   :-4.89000  
+##  1st Qu.:13.63   1st Qu.:35.51   1st Qu.: 5.000   1st Qu.:-1.89000  
+##  Median :13.86   Median :35.51   Median : 8.000   Median : 0.20000  
+##  Mean   :13.87   Mean   :35.51   Mean   : 7.258   Mean   :-0.09236  
+##  3rd Qu.:14.16   3rd Qu.:35.52   3rd Qu.: 9.000   3rd Qu.: 1.63000  
+##  Max.   :14.73   Max.   :35.61   Max.   :12.000   Max.   : 5.08000
+```
+
+
 ### Korelacja
 
 ```r
 data %>% select(-X) %>% as.matrix() %>% cor() %>% corrplot(method = "circle")
 ```
 
-![](data-analysis-herrings_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](data-analysis-herrings_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 

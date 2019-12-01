@@ -83,6 +83,10 @@ data <- mutate_if(data, is.factor, change_na_to_mean)
 ```
 
 ### Szczegółowa analiza wartości atrybutów
+```{r}
+summary(data)
+```
+
 
 ### Korelacja
 ```{r}
