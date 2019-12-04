@@ -1,7 +1,7 @@
 ---
 title: "Analiza danych: śledzie"
 author: "Michał Kałczyński i Patryk Szczuczko"
-date: "01 grudzień, 2019"
+date: "04 grudzień, 2019"
 output: 
  html_document:
     keep_md: true
@@ -162,41 +162,6 @@ change_na_to_mean <- function(column) {
 
 data <- tbl_df(df)
 data <- mutate_if(data, is.factor, change_na_to_mean)
-```
-
-```
-## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia
-```
-
-```
-## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia
-```
-
-```
-## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia
-```
-
-```
-## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia
-```
-
-```
-## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia
-```
-
-```
-## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia
-```
-
-```
-## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia
 ```
 
 ### Szczegółowa analiza wartości atrybutów

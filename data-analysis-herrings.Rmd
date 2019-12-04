@@ -70,7 +70,7 @@ Obserowane długości śledzi są pomiędzy 19cm a 32.5cm. -> Szczegółowa anal
 summary(df)
 ```
 ### Brakujące wartości
-```{r}
+```{r warning=FALSE}
 change_na_to_mean <- function(column) {
   column <- as.numeric(as.character(column))
   column[is.na(column)] <- mean(column[!is.na(column)])
