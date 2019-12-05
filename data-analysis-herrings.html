@@ -276,7 +276,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -371,7 +370,7 @@ summary {
 
 <h1 class="title toc-ignore">Analiza danych: śledzie</h1>
 <h4 class="author">Michał Kałczyński i Patryk Szczuczko</h4>
-<h4 class="date">01 grudzień, 2019</h4>
+<h4 class="date">04 grudzień, 2019</h4>
 
 </div>
 
@@ -381,8 +380,8 @@ summary {
 <li><a href="#wczytywanie-danych">Wczytywanie danych</a></li>
 <li><a href="#exploratory-data-analysis">Exploratory data analysis</a><ul>
 <li><a href="#struktura-danych-i-podstawowe-statystyki">Struktura danych i podstawowe statystyki</a></li>
-<li><a href="#brakujace-wartosci">Brakujące wartości</a></li>
-<li><a href="#szczegoowa-analiza-wartosci-atrybutow">Szczegółowa analiza wartości atrybutów</a></li>
+<li><a href="#brakujące-wartości">Brakujące wartości</a></li>
+<li><a href="#szczegółowa-analiza-wartości-atrybutów">Szczegółowa analiza wartości atrybutów</a></li>
 <li><a href="#korelacja">Korelacja</a></li>
 </ul></li>
 </ul>
@@ -530,7 +529,7 @@ Kolejne kolumny w zbiorze danych to:
 ##  13.861999695 : 1673   Max.   :35.61   Max.   :12.000   Max.   : 5.08000  
 ##  (Other)      :36810</code></pre>
 </div>
-<div id="brakujace-wartosci" class="section level3">
+<div id="brakujące-wartości" class="section level3">
 <h3>Brakujące wartości</h3>
 <pre class="r"><code>change_na_to_mean &lt;- function(column) {
   column &lt;- as.numeric(as.character(column))
@@ -540,22 +539,8 @@ Kolejne kolumny w zbiorze danych to:
 
 data &lt;- tbl_df(df)
 data &lt;- mutate_if(data, is.factor, change_na_to_mean)</code></pre>
-<pre><code>## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia</code></pre>
-<pre><code>## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia</code></pre>
-<pre><code>## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia</code></pre>
-<pre><code>## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia</code></pre>
-<pre><code>## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia</code></pre>
-<pre><code>## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia</code></pre>
-<pre><code>## Warning in (function (column) : pojawiły się wartości NA na skutek
-## przekształcenia</code></pre>
 </div>
-<div id="szczegoowa-analiza-wartosci-atrybutow" class="section level3">
+<div id="szczegółowa-analiza-wartości-atrybutów" class="section level3">
 <h3>Szczegółowa analiza wartości atrybutów</h3>
 <pre class="r"><code>summary(data)</code></pre>
 <pre><code>##        X             length         cfin1             cfin2        
