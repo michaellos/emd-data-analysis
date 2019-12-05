@@ -15,6 +15,8 @@ output:
 library(knitr)
 library(dplyr)
 library(corrplot)
+library(caret)
+library(plotly)
 ```
 
 ## Wczytywanie danych
@@ -70,7 +72,7 @@ Obserowane długości śledzi są pomiędzy 19cm a 32.5cm. -> Szczegółowa anal
 summary(df)
 ```
 ### Brakujące wartości
-```{r}
+```{r warning=FALSE}
 change_na_to_mean <- function(column) {
   column <- as.numeric(as.character(column))
   column[is.na(column)] <- mean(column[!is.na(column)])
@@ -86,10 +88,55 @@ data <- mutate_if(data, is.factor, change_na_to_mean)
 ```{r}
 summary(data)
 ```
+```{r}
+boxplot(data$length, horizontal = TRUE, main = "Długość śledzia", col = hsv(h = 240/360, s = 0.5, v = 0.5))
+```
+```{r}
+boxplot(data[, 3:8], col = rainbow(6, v = 0.5, start = 0, end = 1), main = "Dostępność planktonu")
+boxplot(data[, 3:8], col = rainbow(6, v = 0.5, start = 0, end = 1), main = "Dostępność planktonu", outline = FALSE)
 
+```
+```{r}
+boxplot(data[, 3:4], col = rainbow(2, v = 0.5, start = 0, end = 0.2), main = "Zagęszczenie Calanus finmarchicus")
+boxplot(data[, 3:4], col = rainbow(2, v = 0.5, start = 0, end = 0.2), main = "Zagęszczenie Calanus finmarchicus", outline = FALSE)
+```
+```{r}
+boxplot(data[, 5:6], col = rainbow(2, v = 0.5, start = 0.4, end = 0.6), main = "Zagęszczenie Calanus helgolandicus")
+boxplot(data[, 5:6], col = rainbow(2, v = 0.5, start = 0.4, end = 0.6), main = "Zagęszczenie Calanus helgolandicus", outline = FALSE)
+```
+```{r}
+boxplot(data[, 7:8], col = rainbow(2, v = 0.5, start = 0.8, end = 1), main = "Zagęszczenie widłonogów")
+boxplot(data[, 7:8], col = rainbow(2, v = 0.5, start = 0.8, end = 1), main = "Zagęszczenie widłonogów", outline = FALSE)
+```
+```{r}
+boxplot(data$length, horizontal = TRUE, main = "Natężenie połowów w regionie", col = hsv(h = 240/360, s = 0.5, v = 0.5))
+```
+```{r}
+boxplot(data$fbar, horizontal = TRUE, main = "Roczny narybek", col = hsv(h = 240/360, s = 0.5, v = 0.5))
+```
+```{r}
+boxplot(data$recr, horizontal = TRUE, main = "Łączne roczne natężenie połowów w regionie", col = hsv(h = 240/360, s = 0.5, v = 0.5))
+```
+```{r}
+boxplot(data$cumf, horizontal = TRUE, main = "Łączna liczba ryb złowionych w ramach połowu", col = hsv(h = 240/360, s = 0.5, v = 0.5))
+```
+```{r}
+boxplot(data$totaln, horizontal = TRUE, main = "Temperatura przy powierzchni wody", col = hsv(h = 240/360, s = 0.5, v = 0.5))
+```
+```{r}
+boxplot(data$sst, horizontal = TRUE, main = "Poziom zasolenia wody", col = hsv(h = 240/360, s = 0.5, v = 0.5))
+```
+```{r}
+boxplot(data$nao, horizontal = TRUE, main = "Oscylacja północnoatlantycka", col = hsv(h = 240/360, s = 0.5, v = 0.5))
+```
 
 ### Korelacja
 ```{r}
 data %>% select(-X) %>% as.matrix() %>% cor() %>% corrplot(method = "circle")
 ```
-
+```{r message=FALSE}
+partition <- createDataPartition(y = data$length, p = 0.1, list = FALSE)
+data_partition <- data[partition, ]
+p <- ggplot(data_partition, aes(X, length)) + geom_point() + geom_smooth() + theme_bw()
+ggplotly(p)
+```
