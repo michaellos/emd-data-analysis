@@ -17,11 +17,14 @@ library(dplyr)
 library(corrplot)
 library(caret)
 library(plotly)
+require(Metrics)
 ```
 
 ## Wczytywanie danych
 ```{r wczytywanieDanych, cache=TRUE}
 df <- read.csv('data/sledzie.csv')
+data <- tbl_df(df)
+set.seed(1)
 ```
 
 ## Exploratory data analysis
@@ -147,4 +150,35 @@ partition <- createDataPartition(y = data$length, p = 0.2, list = FALSE)
 data_partition <- data[partition, ]
 p <- ggplot(data_partition, aes(X, length)) + geom_point() + geom_smooth() + theme_bw()
 ggplotly(p)
+```
+
+
+### Przewidywanie rozmiaru śledzia
+```{r regresor}
+r_squered <- function (x, y) cor(x, y) ^ 2
+
+trainTestPartition <- createDataPartition(y=data$length, p=.8, list=FALSE)
+train <- data[trainTestPartition, ]
+test <- data[-trainTestPartition, ]
+
+ctrl <- trainControl(
+  method = "repeatedcv",
+  number = 2,
+  repeats = 1)
+
+fit <- train(length~ .,
+            data = train,
+            method = "rf",
+            trControl = ctrl,
+            ntree = 50)
+fit
+```
+
+```{r predicting}
+predictions <- predict(fit, newdata = test)
+modelValues <- data.frame(obs = test$length, pred = predictions)
+
+rmse_value <- rmse(test$length, as.array(predictions))
+rsq_value <- r_squered(test$length, as.array(predictions))
+cat("RMSE: ", rmse_value, "\nR^2: ", rsq_value)
 ```
