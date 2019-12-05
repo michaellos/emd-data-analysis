@@ -60,20 +60,20 @@ Wyświetlmy kilka pierwszych wierszy ze zbioru:
 head(df)
 ```
 
-Już w pierwszej obserwacji możemy znaleźć zastanawiającą wartość w kolumnie chel2 - znak zapytania. Najprawdopodobniej tak musiała być oznaczana wartość brakująca (??)
+Już w pierwszej obserwacji możemy znaleźć zastanawiającą wartość w kolumnie chel2 - znak zapytania. Najprawdopodobniej tak muszą być oznaczana wartości brakujące, których usunięciem zajmiemy się w dalszej części.
 
-W zbiorze danych możemy zauważyć kilka kolumn oznaczonych jako dane kategoryczne (typ danych Factor). Co ciekawe kolummny te dotyczą dostępności planktonu oraz temperatury wody przy powierzchni, które wydawać by się mogło powinny być wyrażone poprzez liczby, jako dane ilościowe.
+W zbiorze danych możemy zauważyć kilka kolumn oznaczonych jako dane kategoryczne (typ danych Factor). Co ciekawe kolummny te dotyczą dostępności planktonu oraz temperatury wody przy powierzchni. Dane te powinny być wyrażone poprzez liczby, jako dane ilościowe. Tym też zajmiemy się później
 
 ```{r}
 str(df)
 ```
 
-ToDo: zamienić dane kategoryczne na ilościowe (?)
-
-Obserowane długości śledzi są pomiędzy 19cm a 32.5cm. -> Szczegółowa analiza wartości atrybutów?
 ```{r}
 summary(df)
 ```
+
+Z powyższego podsumowania można wyczytać, że obserwowana długość śledzi waha się pomiędzy 19cm a 32.5cm.
+
 ## Brakujące wartości
 Brakujące wartości (oznaczone jako '?') zostały zamienione na średnie wartości atrybutów. W ten sposób z niewygodnego typu kategorycznego można było przejść na typ numeryczny atrybutów.
 ```{r warning=FALSE}
@@ -141,6 +141,7 @@ Analizę korelacji przeprowadzono w oparciu o macierz korelacji pomiędzy atrybu
 ```{r}
 data %>% select(-X) %>% as.matrix() %>% cor() %>% corrplot(method = "circle")
 ```
+
 Z macierzy korelacji można wywnioskować, że długość śledzia jest zależna od temperatury przy powierzchni wody - możemy dostrzec silną negatywną korelację. Widać również, że długość śledzia jest zależna od oscylacji północnoatlantyckiej - tutaj także korelacja jest negatywna.
 
 ## Prezentacja zmiany rozmiaru śledzi w czasie
@@ -172,7 +173,7 @@ rf_model <- train(length~ .,
             method = "rf",
             trControl = ctrl,
             importance = TRUE,
-            ntree = 100)
+            ntree = 2)
 rf_model
 ```
 
