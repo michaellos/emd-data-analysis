@@ -9,6 +9,21 @@ output:
     toc: true
     theme: united
 ---
+## Podsumowanie analizy
+Celem analizy było ustalenie przyczyny spadku rozmiaru śledzia oceanicznego wyławianego w Europie. Zebrane w ciągu ostatnich 60 lat dane zawierały podstawowe informacje o aktualnej sytuacji na morzu.
+
+W ramach analizy zdobyto podstawowe informacje o danych, brakujące wartości zostały zastąpione wartością średnią, zwizualizowane zostały charakterystyki poszczególnych atrybutów, zbadano korelacje. Najmocniej skorelowanymi atrybutami okazały się:
+sst (temperatura przy powierzchni wody)
+nao (oscylacja północnoatlantycka)
+
+W dalszej części analizy stworzono regresor przewidujący rozmiar śledzia. Dla danych testowych uzyskał on następujące miary: RMSE =  1.15 oraz R^2 = 0.52
+
+Ostatecznie ustalono, że główną przyczyną spadku rozmiaru śledzia, były:
+
+ * spadek dostępności różnych gatunków planktonu
+ 
+ * wzrost temperatury przy powierzchni wody
+
 
 ## Wykorzystane biblioteki
 ```{r wczytywanieBibliotek, results='hide', message=FALSE}
@@ -74,7 +89,7 @@ summary(df)
 
 Z powyższego podsumowania można wyczytać, że obserwowana długość śledzi waha się pomiędzy 19cm a 32.5cm.
 
-## Brakujące wartości
+### Brakujące wartości
 Brakujące wartości (oznaczone jako '?') zostały zamienione na średnie wartości atrybutów. W ten sposób z niewygodnego typu kategorycznego można było przejść na typ numeryczny atrybutów.
 ```{r warning=FALSE}
 change_na_to_mean <- function(column) {
@@ -88,7 +103,7 @@ data <- mutate_if(data, is.factor, change_na_to_mean)
 
 ```
 
-## Szczegółowa analiza wartości atrybutów
+### Szczegółowa analiza wartości atrybutów
 Poniżej został przedstawiony rozkład wartości dla wszystkich atrybutów.
 ```{r}
 summary(data)
@@ -136,7 +151,7 @@ boxplot(data$sst, horizontal = TRUE, main = "Poziom zasolenia wody", col = hsv(h
 boxplot(data$nao, horizontal = TRUE, main = "Oscylacja północnoatlantycka", col = hsv(h = 240/360, s = 0.5, v = 0.5))
 ```
 
-## Korelacja
+### Korelacja
 Analizę korelacji przeprowadzono w oparciu o macierz korelacji pomiędzy atrybutami.
 ```{r}
 data %>% select(-X) %>% as.matrix() %>% cor() %>% corrplot(method = "circle")
@@ -144,7 +159,7 @@ data %>% select(-X) %>% as.matrix() %>% cor() %>% corrplot(method = "circle")
 
 Z macierzy korelacji można wywnioskować, że długość śledzia jest zależna od temperatury przy powierzchni wody - możemy dostrzec silną negatywną korelację. Widać również, że długość śledzia jest zależna od oscylacji północnoatlantyckiej - tutaj także korelacja jest negatywna.
 
-## Prezentacja zmiany rozmiaru śledzi w czasie
+### Prezentacja zmiany rozmiaru śledzi w czasie
 Poniższy wykres przedstawia zmianę rozmiaru śledzi w czasie. Został zwizualizowany na podstawie 20% danych z uwagi na to, żeby interakcja z wykresem była płynna.
 ```{r message=FALSE}
 partition <- createDataPartition(y = data$length, p = 0.2, list = FALSE)
@@ -154,7 +169,7 @@ ggplotly(p)
 ```
 
 
-### Przewidywanie rozmiaru śledzia
+## Przewidywanie rozmiaru śledzia
 ```{r regresor}
 r_squered <- function (x, y) cor(x, y) ^ 2
 
@@ -173,7 +188,7 @@ rf_model <- train(length~ .,
             method = "rf",
             trControl = ctrl,
             importance = TRUE,
-            ntree = 2)
+            ntree = 50)
 rf_model
 ```
 
@@ -187,10 +202,16 @@ cat("RMSE: ", rmse_value, "\nR^2: ", rsq_value)
 
 ```
 
-### Analiza ważności atrybutów
+## Analiza ważności atrybutów
 ```{r importance}
 importance <- varImp(rf_model)
 
 ggplot(importance) +
   geom_bar(stat='identity', fill = 'blue')
 ```
+
+Analiza ważności atrybutów wykazała, że najważniejszym atrybutem podczas predykcji długości śledzia okazał się miesiąc połowu. Jednak z racji tego, iż interesuje nas zmiana długości śledzia na przestrzeni lat, atrybut ten nie jest dla nas istotny.
+
+Następne w kolejności są atrybuty związane z dostępnością różnych gatunków planktonu oraz temperatura przy powierzchni wody, co w tym przypadku jest spodziewanym wynikiem, gdyż ten atrybut był najlepiej (choć negatywnie) skorelowany z długością śledzia.
+
+Najmniej istotnym atrybutem jest oscylacja północnoatlantycka. Jest to spowodowane jej wysoką, pozytywną korelacją z temperaturą przy powierzchni wody.
