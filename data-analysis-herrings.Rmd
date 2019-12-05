@@ -17,7 +17,7 @@ library(dplyr)
 library(corrplot)
 library(caret)
 library(plotly)
-require(Metrics)
+library(Metrics)
 ```
 
 ## Wczytywanie danych
@@ -157,6 +157,7 @@ ggplotly(p)
 ```{r regresor}
 r_squered <- function (x, y) cor(x, y) ^ 2
 
+data <- select(data, -X)
 trainTestPartition <- createDataPartition(y=data$length, p=.8, list=FALSE)
 train <- data[trainTestPartition, ]
 test <- data[-trainTestPartition, ]
@@ -166,19 +167,29 @@ ctrl <- trainControl(
   number = 2,
   repeats = 1)
 
-fit <- train(length~ .,
+rf_model <- train(length~ .,
             data = train,
             method = "rf",
             trControl = ctrl,
-            ntree = 50)
-fit
+            importance = TRUE,
+            ntree = 100)
+rf_model
 ```
 
 ```{r predicting}
-predictions <- predict(fit, newdata = test)
+predictions <- predict(rf_model, newdata = test)
 modelValues <- data.frame(obs = test$length, pred = predictions)
 
 rmse_value <- rmse(test$length, as.array(predictions))
 rsq_value <- r_squered(test$length, as.array(predictions))
 cat("RMSE: ", rmse_value, "\nR^2: ", rsq_value)
+
+```
+
+### Analiza ważności atrybutów
+```{r importance}
+importance <- varImp(rf_model)
+
+ggplot(importance) +
+  geom_bar(stat='identity', fill = 'blue')
 ```
