@@ -71,7 +71,8 @@ Obserowane długości śledzi są pomiędzy 19cm a 32.5cm. -> Szczegółowa anal
 ```{r}
 summary(df)
 ```
-### Brakujące wartości
+## Brakujące wartości
+Brakujące wartości (oznaczone jako '?') zostały zamienione na średnie wartości atrybutów. W ten sposób z niewygodnego typu kategorycznego można było przejść na typ numeryczny atrybutów.
 ```{r warning=FALSE}
 change_na_to_mean <- function(column) {
   column <- as.numeric(as.character(column))
@@ -84,10 +85,12 @@ data <- mutate_if(data, is.factor, change_na_to_mean)
 
 ```
 
-### Szczegółowa analiza wartości atrybutów
+## Szczegółowa analiza wartości atrybutów
+Poniżej został przedstawiony rozkład wartości dla wszystkich atrybutów.
 ```{r}
 summary(data)
 ```
+Rozkład wartości dla poszczególnych atrybutów najłatwiej będzie zobrazować za pomocą wykresów pudełkowych. Dla lepszej czytelności rozkładu atrybutów opisujących dostępność planktonu dodano także drugi wykres niezawierający obserwacji odstających.
 ```{r}
 boxplot(data$length, horizontal = TRUE, main = "Długość śledzia", col = hsv(h = 240/360, s = 0.5, v = 0.5))
 ```
@@ -130,12 +133,17 @@ boxplot(data$sst, horizontal = TRUE, main = "Poziom zasolenia wody", col = hsv(h
 boxplot(data$nao, horizontal = TRUE, main = "Oscylacja północnoatlantycka", col = hsv(h = 240/360, s = 0.5, v = 0.5))
 ```
 
-### Korelacja
+## Korelacja
+Analizę korelacji przeprowadzono w oparciu o macierz korelacji pomiędzy atrybutami.
 ```{r}
 data %>% select(-X) %>% as.matrix() %>% cor() %>% corrplot(method = "circle")
 ```
+Z macierzy korelacji można wywnioskować, że długość śledzia jest zależna od temperatury przy powierzchni wody - możemy dostrzec silną negatywną korelację. Widać również, że długość śledzia jest zależna od oscylacji północnoatlantyckiej - tutaj także korelacja jest negatywna.
+
+## Prezentacja zmiany rozmiaru śledzi w czasie
+Poniższy wykres przedstawia zmianę rozmiaru śledzi w czasie. Został zwizualizowany na podstawie 20% danych z uwagi na to, żeby interakcja z wykresem była płynna.
 ```{r message=FALSE}
-partition <- createDataPartition(y = data$length, p = 0.1, list = FALSE)
+partition <- createDataPartition(y = data$length, p = 0.2, list = FALSE)
 data_partition <- data[partition, ]
 p <- ggplot(data_partition, aes(X, length)) + geom_point() + geom_smooth() + theme_bw()
 ggplotly(p)
